@@ -1,31 +1,18 @@
-@'
-# Go
-/bin/
+﻿.env
+.env.*
+!.env.example
+
+.aws-sam/
+.localstack/
+volume/
+
 *.exe
 *.test
 *.out
 coverage.out
 
-# AWS SAM
-.aws-sam/
-
-# LocalStack and DynamoDB Local
-.localstack/
-.dynamodb/
-
-# Environment variables and credentials
-.env
-.env.*
-!.env.example
-
-# Logs
-*.log
-
-# IDE
 .vscode/
 .idea/
-
-# Operating system
 .DS_Store
 Thumbs.db
-'@ | Set-Content .gitignore
+confidential/
