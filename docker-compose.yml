@@ -1,0 +1,38 @@
+﻿services:
+  localstack:
+    image: ${LOCALSTACK_IMAGE:-localstack/localstack-pro:latest}
+    container_name: gameops-localstack
+    hostname: localstack
+
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+
+    environment:
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-southeast-1}
+      DEBUG: ${LOCALSTACK_DEBUG:-0}
+
+      SERVICES: >-
+        lambda,
+        apigateway,
+        events,
+        sqs,
+        dynamodb,
+        cloudformation,
+        iam,
+        logs,
+        sts
+
+      LAMBDA_DOCKER_NETWORK: gameops-local
+      HOSTNAME_FROM_LAMBDA: localstack
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    networks:
+      - gameops-local
+
+networks:
+  gameops-local:
+    name: gameops-local
