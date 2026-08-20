@@ -1,5 +1,11 @@
 # GameOps Lab
 
+## Stage E — infrastructure skeleton
+
+Stage E adds [`infra/cloudformation/template.yaml`](infra/cloudformation/template.yaml), a conceptual SAM/CloudFormation skeleton for the planned HTTP API, ingest and analytics Lambdas, custom EventBridge bus and rule, SQS work queue and dead-letter queue, and DynamoDB table.
+
+The template intentionally declares no resources; the listed components are comments describing later expansion. Template validation, SAM transformation/build, LocalStack deployment, live AWS deployment, resource creation, and end-to-end runtime integration remain unverified. Stages F–G remain planned.
+
 > GameOps Lab is a local-first, AWS-compatible event-driven gaming analytics platform built in Go to explore serverless architecture, asynchronous processing, reliability, and cloud architecture trade-offs without provisioning billable AWS resources.
 
 ## Overview

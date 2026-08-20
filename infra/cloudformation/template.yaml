@@ -1,26 +1,23 @@
-# GameOps Lab AWS Infrastructure
-#
-# THIS FILE IS AWS CLOUDFORMATION.
-#
-# AWS SAM is an extension of AWS CloudFormation.
-# Resources using AWS::Serverless::* are SAM resources.
-# During deployment, SAM transforms them into standard
-# CloudFormation resources.
-#
-# Local development will eventually deploy this template
-# to LocalStack using samlocal, NOT to a real AWS account.
-
+# AWS CloudFormation template for GameOps Lab.
+# Uses the AWS Serverless Application Model (AWS SAM) transform.
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: GameOps Lab planned local-first serverless infrastructure
+Description: Conceptual serverless infrastructure skeleton for GameOps Lab.
 
-# Planned resources (none are implemented in this foundation):
-# - HTTP API: AWS::Serverless::HttpApi
-# - Session API Lambda: AWS::Serverless::Function
-# - EventBridge custom bus: AWS::Events::EventBus
-# - EventBridge rule: AWS::Events::Rule
-# - SQS analytics queue: AWS::SQS::Queue
-# - SQS dead-letter queue: AWS::SQS::Queue
-# - Analytics consumer Lambda: AWS::Serverless::Function
-# - DynamoDB table: AWS::DynamoDB::Table
+# Planned event flow:
+# HTTP API
+#   -> session-ingest Lambda
+#   -> custom EventBridge event bus
+#   -> SessionEnded EventBridge rule
+#   -> SQS work queue, with a dead-letter queue
+#   -> session-analytics Lambda
+#   -> DynamoDB session analytics table
+#
+# Planned resources:
+# - AWS::Serverless::HttpApi
+# - Two AWS::Serverless::Function resources
+# - AWS::Events::EventBus
+# - AWS::Events::Rule
+# - Two AWS::SQS::Queue resources
+# - AWS::DynamoDB::Table
 Resources: {}

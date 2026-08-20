@@ -1,5 +1,21 @@
 # GameOps Lab Architecture
 
+## Stage E infrastructure skeleton
+
+[`infra/cloudformation/template.yaml`](../infra/cloudformation/template.yaml) records the planned serverless topology without declaring deployable resources yet:
+
+```text
+HTTP API
+  -> session-ingest Lambda
+  -> custom EventBridge bus
+  -> SessionEnded EventBridge rule
+  -> SQS work queue + dead-letter queue
+  -> session-analytics Lambda
+  -> DynamoDB analytics table
+```
+
+The empty `Resources` mapping is intentional for this conceptual phase. The flow above is wholly planned; no resource blocks, event targets, IAM permissions, queue redrive policy, API routes, Lambda packaging, or DynamoDB schema are declared. Template validation, SAM transformation/build, LocalStack deployment, live AWS deployment, resource creation, and runtime integration remain pending.
+
 ## TARGET ARCHITECTURE
 
 This diagram describes the intended end state. The AWS resources and application
