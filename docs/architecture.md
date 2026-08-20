@@ -27,6 +27,22 @@ flowchart TD
 
 All rows in this table are planned; none have been runtime verified.
 
+## Current application source
+
+The source currently stops before any transport or infrastructure boundary:
+
+- `SessionService.EndSession` normalizes and validates input, then constructs
+  a `SessionEnded` event.
+- Package-internal event validation protects the invariants shared by session
+  and analytics behavior.
+- `AnalyticsService.ProcessSessionEnded` converts one validated event into one
+  analytics contribution.
+
+These operations perform no I/O. They are not runtime-wired, deployed, or
+end-to-end verified, and they do not publish events, consume queues, persist
+data, or suppress duplicates. Their compilation and behavior remain unverified
+until the unit-test stage.
+
 ## SAM and CloudFormation
 
 **AWS CloudFormation** is the Infrastructure-as-Code engine. **AWS SAM** is a
@@ -53,13 +69,13 @@ unless a later decision explicitly enables real AWS.
 
 ## Delivery sequence
 
-1. Repository foundation
-2. Go domain and application code
-3. Unit tests
-4. AWS adapters
-5. SAM / CloudFormation resources
-6. LocalStack execution and integration verification
-7. Reports and screenshots
+1. Repository foundation — complete
+2. Go domain and application source — implemented; verification pending
+3. Unit tests — planned
+4. AWS adapters — planned
+5. SAM / CloudFormation resources — planned
+6. LocalStack execution and integration verification — planned
+7. Reports and screenshots — planned
 
 AWS-related commands begin only at step 6. This ordering keeps infrastructure
 execution separate from application design and unit-level verification.

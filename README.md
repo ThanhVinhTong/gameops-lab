@@ -9,6 +9,10 @@ executables: a Session API and an Analytics Consumer. The repository begins with
 a deliberately small foundation so the application, AWS adapters,
 infrastructure, and runtime evidence can be added in understandable phases.
 
+Stage B source now includes framework-independent session validation, completed
+session event construction, and per-session analytics transformation. This
+source has not yet been compiled or tested.
+
 ## Target architecture
 
 The following is the **target architecture**. It is not implemented yet.
@@ -36,14 +40,25 @@ Later phases are intended to demonstrate:
 - AWS SAM and CloudFormation
 - local-to-AWS portability
 
-These are project goals, not claims about the current foundation.
+These are project goals, not claims about the current implementation.
+
+## Current source capabilities
+
+- **Implemented as source:** session input normalization and validation,
+  `SessionEnded` construction, event invariant validation, and one-session
+  analytics transformation.
+- **Verification pending:** formatting, compilation, automated unit tests, and
+  representative edge-case fixtures.
+- **Not implemented:** HTTP or Lambda handling, EventBridge publishing, SQS
+  consumption, idempotency, persistence, LocalStack execution, or deployed
+  infrastructure.
 
 ## Repository structure
 
 | Path | Purpose |
 | --- | --- |
 | `cmd/` | Executable entry points for the two future Lambdas |
-| `internal/gameops/` | GameOps domain models and application boundaries |
+| `internal/gameops/` | GameOps domain models and framework-independent application logic |
 | `internal/aws/` | Reserved for later EventBridge and DynamoDB adapters |
 | `internal/config/` | Optional environment configuration |
 | `infra/cloudformation/` | AWS infrastructure definition |
@@ -84,6 +99,9 @@ resources for its intended local workflow.
 
 ## Development phases
 
+Phase 0 corresponds to engineering Stage A. The numbered phases describe
+portfolio milestones; the lettered stages below enforce implementation order.
+
 - **Phase 0 — Repository foundation:** complete
 - **Phase 1 — Local AWS infrastructure:** planned
 - **Phase 2 — Session API and EventBridge:** planned
@@ -93,16 +111,18 @@ resources for its intended local workflow.
 
 Work follows this order:
 
-1. Stage A — Repository foundation
-2. Stage B — Go domain/application code
-3. Stage C — Unit tests
-4. Stage D — AWS adapters
-5. Stage E — SAM / CloudFormation infrastructure
-6. Stage F — Local AWS execution and integration verification
-7. Stage G — Reports/screenshots
+1. Stage A — Repository foundation: complete
+2. Stage B — Go domain/application code: source implemented; verification pending
+3. Stage C — Unit tests: planned
+4. Stage D — AWS adapters: planned
+5. Stage E — SAM / CloudFormation infrastructure: planned
+6. Stage F — Local AWS execution and integration verification: planned
+7. Stage G — Reports/screenshots: planned
 
 AWS, SAM, `samlocal`, and LocalStack API commands belong only in Stage F.
 Earlier stages may be reviewed with local non-AWS development commands.
+Stage G documents and evaluates evidence captured during Stage F; it is not a
+second infrastructure-execution stage.
 
 ## Reports
 
@@ -113,4 +133,4 @@ failure handling, and recovery reviewable without a hosted environment.
 
 ## Current status
 
-> Repository foundation only. AWS resources and application flows have not yet been runtime verified.
+> Phase 0 repository setup is complete. Stage B framework-independent session and analytics source is present but has not yet been built or tested. Runtime wiring, LocalStack verification, and AWS deployment remain planned.
