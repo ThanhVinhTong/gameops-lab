@@ -11,7 +11,12 @@ infrastructure, and runtime evidence can be added in understandable phases.
 
 Stage B source now includes framework-independent session validation, completed
 session event construction, and per-session analytics transformation. This
-source has not yet been compiled or tested.
+source has not been compiled or tested by Codex; no manual output is recorded
+in the repository yet.
+
+Stage D source adds LocalStack-restricted AWS SDK for Go v2 client construction,
+an EventBridge publisher, and a DynamoDB analytics store. The adapters are not
+wired into the executables and have not contacted LocalStack or AWS.
 
 ## Target architecture
 
@@ -49,11 +54,15 @@ These are project goals, not claims about the current implementation.
   analytics transformation.
 - **Authored as test source:** deterministic unit cases for normalization,
   validation errors, timestamp ordering, whole-second duration behavior,
-  invariant protection, analytics mapping, and analytics rejection.
-- **Verification pending:** formatting, compilation, test discovery, test
-  execution, and observed results.
-- **Not implemented:** HTTP or Lambda handling, EventBridge publishing, SQS
-  consumption, idempotency, persistence, LocalStack execution, or deployed
+  invariant protection, analytics mapping, adapter request construction, and
+  adapter failure propagation.
+- **Implemented as adapter source:** fail-closed LocalStack client
+  configuration, one-entry EventBridge publishing, and DynamoDB aggregate
+  updates.
+- **Verification pending:** AWS SDK dependency resolution, formatting,
+  compilation, test discovery, test execution, and observed results.
+- **Not implemented:** HTTP or Lambda handling, runtime wiring to EventBridge
+  or DynamoDB, SQS consumption, idempotency, LocalStack execution, or deployed
   infrastructure.
 
 ## Repository structure
@@ -62,7 +71,7 @@ These are project goals, not claims about the current implementation.
 | --- | --- |
 | `cmd/` | Executable entry points for the two future Lambdas |
 | `internal/gameops/` | GameOps domain models and framework-independent application logic |
-| `internal/aws/` | Reserved for later EventBridge and DynamoDB adapters |
+| `internal/aws/` | LocalStack-only EventBridge and DynamoDB adapter source |
 | `internal/config/` | Optional environment configuration |
 | `infra/cloudformation/` | AWS infrastructure definition |
 | `scripts/` | Reserved for later, small workflow helpers |
@@ -100,6 +109,13 @@ local emulation for API Gateway, Lambda, EventBridge, SQS, DynamoDB, and
 CloudFormation. The repository does not require AWS credentials or billable AWS
 resources for its intended local workflow.
 
+The Stage D client factory accepts only approved local endpoints and uses dummy
+credentials. Current adapters do not provide an intentional AWS fallback, but
+the allowlist is an application guard rather than a network-security boundary.
+AWS SDK for Go v2 now requires Go 1.24, so the module directive has been raised.
+Dependency versions and checksums remain pending until `go mod tidy` is run
+manually.
+
 ## Development phases
 
 Phase 0 corresponds to engineering Stage A. The numbered phases describe
@@ -117,7 +133,7 @@ Work follows this order:
 1. Stage A — Repository foundation: complete
 2. Stage B — Go domain/application code: source implemented; verification pending
 3. Stage C — Unit tests: source present; execution pending
-4. Stage D — AWS adapters: planned
+4. Stage D — AWS adapters: source and mock tests present; dependency/build/runtime verification pending
 5. Stage E — SAM / CloudFormation infrastructure: planned
 6. Stage F — Local AWS execution and integration verification: planned
 7. Stage G — Reports/screenshots: planned
@@ -137,6 +153,10 @@ failure handling, and recovery reviewable without a hosted environment.
 No Stage C result or evidence is recorded until the test source is executed and
 the observed output is available.
 
+No Stage D result or evidence is recorded until dependencies are resolved and
+the adapter tests are executed. LocalStack screenshots remain a Stage F/G
+activity.
+
 ## Current status
 
-> Stage A is complete. Stage B implementation source and Stage C unit-test source are present. Codex has not built the project or executed the tests, so compilation, test discovery, test results, and runtime behavior remain unverified. Stages D–G remain planned.
+> Stage A is complete. Stage B implementation source, Stage C unit-test source, and Stage D LocalStack-only AWS adapter and test source are present. Dependencies have not been resolved, and Codex has not built or executed the project. Compilation, test results, LocalStack connectivity, and runtime behavior remain unverified. Stages E–G remain planned.

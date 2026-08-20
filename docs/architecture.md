@@ -47,6 +47,44 @@ Unit-test source now documents the intended contracts for normalization,
 validation, duration calculation, and analytics transformation. The tests have
 not been executed by Codex, so no pass result or coverage claim is made.
 
+### Stage D source boundaries
+
+The following view describes source-code relationships only. Nothing here is
+runtime-wired or connected to LocalStack.
+
+```mermaid
+flowchart LR
+    Sessions[SessionService] --> Event[SessionEnded]
+    Event --> Publisher[EventBridgePublisher]
+    Publisher --> PutEvents[PutEvents client interface]
+
+    Analytics[AnalyticsService] --> Contribution[SessionAnalyticsContribution]
+    Contribution --> Store[DynamoDBAnalyticsStore]
+    Store --> UpdateItem[UpdateItem client interface]
+
+    Factory[LocalStack-only client factory] -. supplies .-> PutEvents
+    Factory -. supplies .-> UpdateItem
+```
+
+The client factory fails closed unless it receives an explicit region and an
+approved local endpoint. It uses static dummy credentials, disables proxy use
+and redirects, and current adapters do not supply endpoint overrides. This is
+an application guard rather than a network-security sandbox; DNS behavior and
+deliberate SDK option overrides are outside its guarantee.
+
+The planned DynamoDB aggregate contract is:
+
+| Field | Current adapter representation |
+| --- | --- |
+| partition key | `USER#<base64url(user ID)>` |
+| sort key | `GAME#<base64url(game ID)>#PLATFORM#<base64url(platform)>` |
+| counters | atomic additions to session count and total duration |
+| descriptive/last fields | last-writer-wins assignments |
+
+Duplicate contributions currently increment again, and out-of-order events can
+move last-writer-wins fields backward. Both are deliberate later-phase
+reliability concerns.
+
 ## SAM and CloudFormation
 
 **AWS CloudFormation** is the Infrastructure-as-Code engine. **AWS SAM** is a
@@ -76,7 +114,7 @@ unless a later decision explicitly enables real AWS.
 1. Repository foundation — complete
 2. Go domain and application source — implemented; verification pending
 3. Unit tests — source present; execution pending
-4. AWS adapters — planned
+4. AWS adapters — source and mock tests present; verification pending
 5. SAM / CloudFormation resources — planned
 6. LocalStack execution and integration verification — planned
 7. Reports and screenshots — planned
