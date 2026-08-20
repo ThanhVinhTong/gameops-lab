@@ -47,8 +47,11 @@ These are project goals, not claims about the current implementation.
 - **Implemented as source:** session input normalization and validation,
   `SessionEnded` construction, event invariant validation, and one-session
   analytics transformation.
-- **Verification pending:** formatting, compilation, automated unit tests, and
-  representative edge-case fixtures.
+- **Authored as test source:** deterministic unit cases for normalization,
+  validation errors, timestamp ordering, whole-second duration behavior,
+  invariant protection, analytics mapping, and analytics rejection.
+- **Verification pending:** formatting, compilation, test discovery, test
+  execution, and observed results.
 - **Not implemented:** HTTP or Lambda handling, EventBridge publishing, SQS
   consumption, idempotency, persistence, LocalStack execution, or deployed
   infrastructure.
@@ -113,7 +116,7 @@ Work follows this order:
 
 1. Stage A — Repository foundation: complete
 2. Stage B — Go domain/application code: source implemented; verification pending
-3. Stage C — Unit tests: planned
+3. Stage C — Unit tests: source present; execution pending
 4. Stage D — AWS adapters: planned
 5. Stage E — SAM / CloudFormation infrastructure: planned
 6. Stage F — Local AWS execution and integration verification: planned
@@ -131,6 +134,9 @@ later, real screenshots of runtime behavior. Evidence is especially important
 for a local-only portfolio project because it makes successful execution,
 failure handling, and recovery reviewable without a hosted environment.
 
+No Stage C result or evidence is recorded until the test source is executed and
+the observed output is available.
+
 ## Current status
 
-> Phase 0 repository setup is complete. Stage B framework-independent session and analytics source is present but has not yet been built or tested. Runtime wiring, LocalStack verification, and AWS deployment remain planned.
+> Stage A is complete. Stage B implementation source and Stage C unit-test source are present. Codex has not built the project or executed the tests, so compilation, test discovery, test results, and runtime behavior remain unverified. Stages D–G remain planned.

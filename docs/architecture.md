@@ -41,7 +41,11 @@ The source currently stops before any transport or infrastructure boundary:
 These operations perform no I/O. They are not runtime-wired, deployed, or
 end-to-end verified, and they do not publish events, consume queues, persist
 data, or suppress duplicates. Their compilation and behavior remain unverified
-until the unit-test stage.
+until the unit-test source is manually executed.
+
+Unit-test source now documents the intended contracts for normalization,
+validation, duration calculation, and analytics transformation. The tests have
+not been executed by Codex, so no pass result or coverage claim is made.
 
 ## SAM and CloudFormation
 
@@ -71,7 +75,7 @@ unless a later decision explicitly enables real AWS.
 
 1. Repository foundation — complete
 2. Go domain and application source — implemented; verification pending
-3. Unit tests — planned
+3. Unit tests — source present; execution pending
 4. AWS adapters — planned
 5. SAM / CloudFormation resources — planned
 6. LocalStack execution and integration verification — planned
