@@ -1,6 +1,6 @@
 # AWS adapters
 
-> This package contains AWS SDK for Go v2 client-factory source restricted to LocalStack endpoints. It does not support live AWS endpoints. The source and tests have not yet been built or executed by Codex.
+> This package contains AWS SDK for Go v2 client-factory source restricted to LocalStack endpoints. It does not support live AWS endpoints.
 
 ## Local-only client policy
 
