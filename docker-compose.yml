@@ -1,38 +1,16 @@
-﻿services:
+services:
   localstack:
+    # LocalStack-specific: the image may be overridden in .env.
     image: ${LOCALSTACK_IMAGE:-localstack/localstack-pro:latest}
-    container_name: gameops-localstack
-    hostname: localstack
-
     ports:
-      - "127.0.0.1:4566:4566"
-      - "127.0.0.1:4510-4559:4510-4559"
-
+      - "4566:4566"
     environment:
-      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-southeast-1}
-      DEBUG: ${LOCALSTACK_DEBUG:-0}
-
-      SERVICES: >-
-        lambda,
-        apigateway,
-        events,
-        sqs,
-        dynamodb,
-        cloudformation,
-        iam,
-        logs,
-        sts
-
-      LAMBDA_DOCKER_NETWORK: gameops-local
-      HOSTNAME_FROM_LAMBDA: localstack
-
+      # LocalStack-specific: keep the real token in uncommitted .env only.
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN:-}
+      SERVICES: lambda,apigateway,events,sqs,dynamodb,cloudformation,iam,logs,sts
+      AWS_DEFAULT_REGION: ${AWS_REGION:-ap-southeast-1}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
-    networks:
-      - gameops-local
-
-networks:
-  gameops-local:
-    name: gameops-local
+      # LocalStack-generated state is ignored by Git.
+      - "./.localstack:/var/lib/localstack"
+      # Future Lambda emulation uses the host Docker engine.
+      - "/var/run/docker.sock:/var/run/docker.sock"
